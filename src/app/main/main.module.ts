@@ -1,3 +1,4 @@
+import { HomeModule } from './home/home.module';
 import { UserModule } from './user/user.module';
 import { RouterModule, Routes } from '@angular/router';
 import { mainRoutes } from './main.routes';
@@ -9,6 +10,7 @@ import { MainComponent } from './main.component';
   imports: [
     CommonModule,
     UserModule,
+    HomeModule,
     RouterModule.forChild(mainRoutes)
   ],
   declarations: [MainComponent]
