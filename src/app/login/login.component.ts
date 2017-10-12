@@ -14,22 +14,26 @@ export class LoginComponent implements OnInit {
 
     loading = false;
     model = {username: '', password: ''};
+    returnUrl: string;
 
     constructor(private router: Router,
                 private activatedRouter: ActivatedRoute,
-                private authenService: AuthenService
-        , private notiService: NotificationService) {
+                private authService: AuthenService
+        , private notifyService: NotificationService) {
     }
 
     ngOnInit() {
+        this.activatedRouter.queryParams.subscribe(params => {
+            this.returnUrl = params['returnUrl'] || UrlConstants.HOME;
+        });
     }
 
     login() {
         this.loading = true;
-        this.authenService.login(this.model.username, this.model.password).subscribe(data => {
-            this.router.navigate([UrlConstants.HOME]);
+        this.authService.login(this.model.username, this.model.password).subscribe(data => {
+            this.router.navigate([this.returnUrl]);
         }, error => {
-            this.notiService.printErrorMessage(MessageConstants.SYSTEM_ERROR_MSG);
+            this.notifyService.printErrorMessage(MessageConstants.SYSTEM_ERROR_MSG);
             this.loading = false;
         });
     }
