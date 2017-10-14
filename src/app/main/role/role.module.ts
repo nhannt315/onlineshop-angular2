@@ -4,6 +4,8 @@ import {RoleComponent} from './role.component';
 import {RouterModule, Routes} from '@angular/router';
 import {DataService} from '../../core/services/data.service';
 import {NotificationService} from '../../core/services/notification.service';
+import {PaginationModule} from 'ngx-bootstrap';
+import {FormsModule} from '@angular/forms';
 
 const roleRoutes: Routes = [
     {path: '', redirectTo: 'index', pathMatch: 'full'},
@@ -13,7 +15,9 @@ const roleRoutes: Routes = [
 @NgModule({
     imports: [
         CommonModule,
-        RouterModule.forChild(roleRoutes)
+        RouterModule.forChild(roleRoutes),
+        PaginationModule.forRoot(),
+        FormsModule
     ],
     providers: [DataService, NotificationService],
     declarations: [RoleComponent]
