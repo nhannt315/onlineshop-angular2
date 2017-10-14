@@ -38,6 +38,11 @@ export class RoleComponent implements OnInit {
                     this.notifyService.printSuccessMessage(MessageConstants.CREATED_OK_MSG);
                 }, error => this.dataService.handleError(error));
             } else {
+                this.dataService.put('/api/appRole/update', JSON.stringify(this.entity)).subscribe((response: any) => {
+                    this.loadData();
+                    this.modalAddEdit.hide();
+                    this.notifyService.printSuccessMessage(MessageConstants.UPDATED_OK_MSG);
+                }, error => this.dataService.handleError(error));
             }
         }
     }
@@ -61,6 +66,31 @@ export class RoleComponent implements OnInit {
     showAddModal() {
         this.entity = {};
         this.modalAddEdit.show();
+    }
+
+    showEditModal(id: any) {
+        this.entity = {};
+        this.loadRole(id);
+        this.modalAddEdit.show();
+    }
+
+    loadRole(id: any) {
+        this.dataService.get(`/api/appRole/detail/${id}`).subscribe((response) => {
+            this.entity = response;
+        });
+    }
+
+    deleteRole(id: any) {
+        this.notifyService.printConfirmationDialog(MessageConstants.CONFIRM_DELETE_MSG, () => this.deleteRoleConfirm(id));
+    }
+
+    deleteRoleConfirm(id: any) {
+        this.dataService.delete(`/api/appRole/delete`, 'id', id).subscribe((response) => {
+            this.notifyService.printSuccessMessage(MessageConstants.DELETED_OK_MSG);
+            this.loadData();
+        }, error => {
+            this.notifyService.printErrorMessage(MessageConstants.SYSTEM_ERROR_MSG);
+        });
     }
 
 }
