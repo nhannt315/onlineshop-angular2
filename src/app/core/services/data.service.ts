@@ -17,6 +17,8 @@ export class DataService {
                 private _authenService: AuthenService,
                 private _notificationService: NotificationService,
                 private _utilityService: UtilityService) {
+        this.headers = new Headers();
+        this.headers.append('Content-type', 'application/json');
     }
 
     get(uri: string) {
@@ -83,7 +85,7 @@ export class DataService {
     }
 
     private extractData(res: Response) {
-        const body = res.json;
+        const body = res.json();
         return body || {};
     }
 
