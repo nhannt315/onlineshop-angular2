@@ -12,6 +12,7 @@ import {LoggedInUser} from '../core/domain/loggedin.user';
 export class MainComponent implements OnInit {
 
     public user: LoggedInUser;
+    public baseUrl = SystemConstants.BASE_API;
 
     constructor(private utilService: UtilityService, private authService: AuthenService) {
     }

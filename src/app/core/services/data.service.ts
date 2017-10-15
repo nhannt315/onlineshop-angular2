@@ -6,7 +6,7 @@ import {SystemConstants} from './../common/system.constants';
 import {Http, Response, Headers} from '@angular/http';
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs/Rx';
 
 @Injectable()
 export class DataService {
@@ -79,7 +79,7 @@ export class DataService {
         );
         return this._http
             .post(`${SystemConstants.BASE_API}${uri}`, data, {
-                headers: this.headers
+                headers: newHeader
             })
             .map(this.extractData);
     }
@@ -95,7 +95,7 @@ export class DataService {
             this._notificationService.printErrorMessage(MessageConstants.LOGIN_AGAIN_MSG);
             this._utilityService.navigateToLogin();
         } else {
-            const errMsg = JSON.parse(error._body).Message;
+            const errMsg = JSON.parse(error._body).Message || JSON.parse(error._body).error;
             this._notificationService.printErrorMessage(errMsg);
             return Observable.throw(errMsg);
         }
