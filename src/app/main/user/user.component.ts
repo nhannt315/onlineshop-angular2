@@ -3,6 +3,7 @@ import {ModalDirective} from 'ngx-bootstrap';
 import {DataService} from '../../core/services/data.service';
 import {NotificationService} from '../../core/services/notification.service';
 import {MessageConstants} from '../../core/common/message.constants';
+import {IMultiSelectOption} from 'angular-2-dropdown-multiselect';
 
 @Component({
     selector: 'app-user',
@@ -13,25 +14,35 @@ export class UserComponent implements OnInit {
 
     @ViewChild('modalAddEdit')
     public modalAddEdit: ModalDirective;
+    public myRoles: string[] = [];
     public pageIndex = 1;
-    public pageSize = 10;
+    public pageSize = 5;
     public pageDisplay = 10;
     public filter = '';
     public totalRow: number;
     public entity: any;
 
+    public allRoles: IMultiSelectOption[] = [];
+    public roles: any[];
     users: any[];
+
+    public dateOptions: any = {
+        local: {format: 'DD/MM/YYYY'},
+        alwaysShowCalendars: false,
+        singleDatePicker: true
+    };
 
     constructor(private dataService: DataService, private notifyService: NotificationService) {
     }
 
     ngOnInit() {
         this.loadData();
+        this.getRoleList();
     }
 
     saveChange(isValid: boolean) {
-        console.log(isValid);
         if (isValid) {
+            this.entity.Roles = this.myRoles;
             if (this.entity.Id === undefined) {
                 this.dataService.post('/api/appUser/add', JSON.stringify(this.entity)).subscribe((response: any) => {
                     this.loadData();
@@ -71,13 +82,29 @@ export class UserComponent implements OnInit {
 
     showEditModal(id: any) {
         this.entity = {};
-        this.loadRole(id);
+        this.loadUserDetail(id);
         this.modalAddEdit.show();
     }
 
-    loadRole(id: any) {
+    selectGender(event) {
+        this.entity.Gender = event.target.value;
+    }
+
+    getRoleList() {
+        this.dataService.get(
+            `/api/appRole/getlistall`
+        ).subscribe((response: any) => {
+            this.allRoles = [];
+            for (const role of response) {
+                this.allRoles.push({id: role.Name, name: role.Description});
+            }
+        }, error => this.dataService.handleError(error));
+    }
+
+    loadUserDetail(id: any) {
         this.dataService.get(`/api/appUser/detail/${id}`).subscribe((response) => {
             this.entity = response;
+            console.log(response);
         });
     }
 
