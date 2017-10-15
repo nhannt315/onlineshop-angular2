@@ -5,6 +5,8 @@ import {NotificationService} from '../../core/services/notification.service';
 import {MessageConstants} from '../../core/common/message.constants';
 import {IMultiSelectOption} from 'angular-2-dropdown-multiselect';
 
+declare let moment: any;
+
 @Component({
     selector: 'app-user',
     templateUrl: './user.component.html',
@@ -27,7 +29,7 @@ export class UserComponent implements OnInit {
     users: any[];
 
     public dateOptions: any = {
-        local: {format: 'DD/MM/YYYY'},
+        locale: {format: 'DD/MM/YYYY'},
         alwaysShowCalendars: false,
         singleDatePicker: true
     };
@@ -42,6 +44,7 @@ export class UserComponent implements OnInit {
 
     saveChange(isValid: boolean) {
         if (isValid) {
+            console.log(this.entity);
             this.entity.Roles = this.myRoles;
             if (this.entity.Id === undefined) {
                 this.dataService.post('/api/appUser/add', JSON.stringify(this.entity)).subscribe((response: any) => {
@@ -57,6 +60,10 @@ export class UserComponent implements OnInit {
                 }, error => this.dataService.handleError(error));
             }
         }
+    }
+
+    selectDate(event) {
+        this.entity.BirthDay = event.end.format('DD/MM/YYYY');
     }
 
     loadData() {
@@ -104,7 +111,12 @@ export class UserComponent implements OnInit {
     loadUserDetail(id: any) {
         this.dataService.get(`/api/appUser/detail/${id}`).subscribe((response) => {
             this.entity = response;
-            console.log(response);
+            this.myRoles = [];
+            for (const role of this.entity.Roles) {
+                this.myRoles.push(role);
+            }
+            this.entity.BirthDay = moment(new Date(this.entity.BirthDay)).format('DD/MM/YYYY');
+            console.log(this.entity);
         });
     }
 
