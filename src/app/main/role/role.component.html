@@ -5,9 +5,10 @@
     <div class="title_right">
         <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Gõ tên quyền">
+                <input type="text" class="form-control" (keyup.enter)="loadData()" [(ngModel)]="filter"
+                       placeholder="Gõ tên quyền">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">Tìm</button>
+                    <button class="btn btn-default" (click)="loadData()" type="button">Tìm</button>
                 </span>
             </div>
         </div>
@@ -26,7 +27,6 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -40,8 +40,12 @@
                             <td>{{role.Name}}</td>
                             <td>{{role.Description}}</td>
                             <td>
-                                <button class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></button>
-                                <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-primary" (click)="showEditModal(role.Id)">
+                                    <i class="fa fa-pencil-square-o"></i>
+                                </button>
+                                <button class="btn btn-danger" (click)="deleteRole(role.Id)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
                             </td>
                         </tr>
                     </tbody>
@@ -71,6 +75,11 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div *ngIf="!entity">
+                    <img
+                        src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+                        alt="">
+                </div>
                 <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm"
                       (ngSubmit)="saveChange(addEditForm.valid)" *ngIf="entity">
                     <div class="form-group">
@@ -97,7 +106,9 @@
                     <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                             <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">Hủy bỏ</button>
-                            <button class="btn btn-success" type="submit" [disabled]="!addEditForm.form.valid">Cập nhật</button>
+                            <button class="btn btn-success" type="submit" [disabled]="!addEditForm.form.valid">Cập
+                                nhật
+                            </button>
                         </div>
                     </div>
                 </form>
