@@ -1,18 +1,14 @@
-import { AuthenService } from './authen.service';
-import { Http } from '@angular/http';
-import { Router } from '@angular/router';
-import { UrlConstants } from './../common/url.constants';
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import {Http} from '@angular/http';
+import {AuthenService} from './authen.service';
+import {UrlConstants} from '../common/url.constants';
 
 @Injectable()
 export class UtilityService {
     private _router: Router;
 
-    constructor(
-        router: Router,
-        private http: Http,
-        private authenService: AuthenService
-    ) {
+    constructor(router: Router, private http: Http, private authenService: AuthenService) {
         this._router = router;
     }
 
@@ -24,16 +20,18 @@ export class UtilityService {
     navigate(path: string) {
         this._router.navigate([path]);
     }
+
     navigateToLogin() {
         this._router.navigate([UrlConstants.LOGIN]);
     }
+
     Unflatten = (arr: any[]): any[] => {
         const map = {};
         const roots: any[] = [];
         for (let i = 0; i < arr.length; i += 1) {
             const node = arr[i];
             node.children = [];
-            map[node.Id] = i; // use map to look-up the parents
+            map[node.ID] = i; // use map to look-up the parents
             if (node.ParentId !== null) {
                 arr[map[node.ParentId]].children.push(node);
             } else {
@@ -41,7 +39,8 @@ export class UtilityService {
             }
         }
         return roots;
-    };
+    }
+
 
     MakeSeoTitle(input: string) {
         if (input === undefined || input === '') {
@@ -59,10 +58,7 @@ export class UtilityService {
         slug = slug.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
         slug = slug.replace(/đ/gi, 'd');
         // Xóa các ký tự đặt biệt
-        slug = slug.replace(
-            /\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi,
-            ''
-        );
+        slug = slug.replace(/\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
         // Đổi khoảng trắng thành ký tự gạch ngang
         slug = slug.replace(/ /gi, '-');
         // Đổi nhiều ký tự gạch ngang liên tiếp thành 1 ký tự gạch ngang
