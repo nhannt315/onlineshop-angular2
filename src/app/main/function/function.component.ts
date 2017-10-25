@@ -17,12 +17,16 @@ export class FunctionComponent implements OnInit {
     public addEditModal: ModalDirective;
     @ViewChild(TreeComponent)
     private treeFunction: TreeComponent;
+    @ViewChild('permissionModal')
+    public permissionModal: ModalDirective;
 
     public _functionHierachy: any[];
     public _functions: any[];
     public entity: any;
     public editFlag: boolean;
     public filter = '';
+    public functionId: string;
+    public _permission: any[];
 
     constructor(private dataService: DataService, private notifyService: NotificationService, private utilService: UtilityService) {
     }
@@ -39,6 +43,15 @@ export class FunctionComponent implements OnInit {
             }, error => this.dataService.handleError(error));
     }
 
+    public showPermission(id: any) {
+        this.dataService.get(`/api/appRole/getAllPermission?functionId=${id}`).subscribe((response: any[]) => {
+            this.functionId = id;
+            this._permission = response;
+            this.permissionModal.show();
+            console.log(this._permission);
+        }, error => this.dataService.handleError(error));
+    }
+
     public showAdd() {
         this.entity = [];
         this.addEditModal.show();
@@ -51,6 +64,19 @@ export class FunctionComponent implements OnInit {
             this.editFlag = true;
             this.addEditModal.show();
         }, error => this.dataService.handleError(error));
+    }
+
+    public savePermission(valid: boolean, _permission: any) {
+        if (valid) {
+            const data = {
+                Permissions: this._permission,
+                FunctionId: this.functionId
+            };
+            this.dataService.post('/api/appRole/savePermission', JSON.stringify(data)).subscribe((response: any) => {
+                this.notifyService.printSuccessMessage(response);
+                this.permissionModal.hide();
+            }, error => this.dataService.handleError(error));
+        }
     }
 
     public saveChanges(valid: boolean) {
