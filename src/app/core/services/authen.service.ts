@@ -45,11 +45,52 @@ export class AuthenService {
                 userData.username,
                 userData.fullName,
                 userData.email,
-                userData.avatar
+                userData.avatar,
+                userData.roles,
+                userData.permissions
             );
         } else {
             user = null;
         }
         return user;
     }
+
+    checkAccess(functionID: string) {
+        const user: LoggedInUser = this.getLoggedInUser();
+        const result = false;
+        const permissions: any[] = JSON.parse(user.permissions);
+        const roles: any[] = JSON.parse(user.roles);
+        const hasPermission: number = permissions.findIndex(x => x.FunctionId === functionID && x.CanRead === true);
+        return hasPermission !== -1 || roles.findIndex(x => x === 'Admin') !== -1;
+    }
+
+    hasPermission(functionId: string, action: string): boolean {
+        const user: LoggedInUser = this.getLoggedInUser();
+        let result = false;
+        const permissions: any[] = JSON.parse(user.permissions);
+        const roles: any[] = JSON.parse(user.roles);
+        let hasPermission: number;
+        switch (action) {
+            case 'create':
+                hasPermission = permissions.findIndex(x => x.FunctionId === functionId && x.CanCreate === true);
+                if (hasPermission !== -1 || roles.findIndex(x => x === 'Admin') !== -1) {
+                    result = true;
+                }
+                break;
+            case 'update':
+                hasPermission = permissions.findIndex(x => x.FunctionId === functionId && x.CanUpdate === true);
+                if (hasPermission !== -1 || roles.findIndex(x => x === 'Admin') !== -1) {
+                    result = true;
+                }
+                break;
+            case 'delete':
+                hasPermission = permissions.findIndex(x => x.FunctionId === functionId && x.CanDelete === true);
+                if (hasPermission !== -1 || roles.findIndex(x => x === 'Admin') !== -1) {
+                    result = true;
+                }
+                break;
+        }
+        return result;
+    }
+
 }

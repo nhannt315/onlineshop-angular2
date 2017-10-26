@@ -10,6 +10,7 @@ import {MultiselectDropdownModule} from 'angular-2-dropdown-multiselect';
 import {Daterangepicker} from 'ng2-daterangepicker';
 import {UploadService} from '../../core/services/upload.service';
 import {UtilityService} from '../../core/services/utility.service';
+import {AuthenService} from '../../core/services/authen.service';
 
 const userRoutes: Routes = [
     {path: '', redirectTo: 'index', pathMatch: 'full'},
@@ -26,7 +27,7 @@ const userRoutes: Routes = [
         PaginationModule.forRoot(),
         ModalModule.forRoot()
     ],
-    providers: [DataService, NotificationService, UploadService, UtilityService],
+    providers: [DataService, NotificationService, UploadService, UtilityService, AuthenService],
     declarations: [UserComponent]
 })
 export class UserModule {

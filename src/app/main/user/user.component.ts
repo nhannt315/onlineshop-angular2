@@ -6,6 +6,8 @@ import {MessageConstants} from '../../core/common/message.constants';
 import {IMultiSelectOption} from 'angular-2-dropdown-multiselect';
 import {UploadService} from '../../core/services/upload.service';
 import {SystemConstants} from '../../core/common/system.constants';
+import {AuthenService} from '../../core/services/authen.service';
+import {UtilityService} from '../../core/services/utility.service';
 
 declare let moment: any;
 
@@ -37,7 +39,14 @@ export class UserComponent implements OnInit {
         singleDatePicker: true
     };
 
-    constructor(private dataService: DataService, private notifyService: NotificationService, private uploadService: UploadService) {
+    constructor(public authService: AuthenService,
+                private dataService: DataService,
+                private notifyService: NotificationService,
+                private uploadService: UploadService,
+                private utilService: UtilityService) {
+        if (!authService.checkAccess('USER')) {
+            utilService.navigateToLogin();
+        }
     }
 
     ngOnInit() {

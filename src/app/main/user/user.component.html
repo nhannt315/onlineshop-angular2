@@ -21,7 +21,9 @@
             <div class="x_title">
                 <ul class="nav navbar-right panel_toolbox">
                     <li>
-                        <button class="btn btn-success" (click)="showAddModal()">Thêm mới</button>
+                        <button *ngIf="authService.hasPermission('USER','create')" class="btn btn-success"
+                                (click)="showAddModal()">Thêm mới
+                        </button>
                     </li>
                 </ul>
                 <div class="clearfix"></div>
@@ -51,10 +53,12 @@
                                      class="small-image img-responsive" width="100px" height="100px">
                             </td>
                             <td>
-                                <button class="btn btn-primary" (click)="showEditModal(user.Id)">
+                                <button *ngIf="authService.hasPermission('USER', 'update')" class="btn btn-primary"
+                                        (click)="showEditModal(user.Id)">
                                     <i class="fa fa-pencil-square-o"></i>
                                 </button>
-                                <button class="btn btn-danger" (click)="deleteRole(user.Id)">
+                                <button *ngIf="authService.hasPermission('USER', 'delete')" class="btn btn-danger"
+                                        (click)="deleteRole(user.Id)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </td>

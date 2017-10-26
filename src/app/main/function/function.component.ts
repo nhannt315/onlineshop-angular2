@@ -48,21 +48,7 @@ export class FunctionComponent implements OnInit {
             this.functionId = id;
             this._permission = response;
             this.permissionModal.show();
-            console.log(this._permission);
-        }, error => this.dataService.handleError(error));
-    }
-
-    public showAdd() {
-        this.entity = [];
-        this.addEditModal.show();
-        this.editFlag = false;
-    }
-
-    public showEdit(id: string) {
-        this.dataService.get(`/api/function/detail/${id}`).subscribe((response: any) => {
-            this.entity = response;
-            this.editFlag = true;
-            this.addEditModal.show();
+            console.log(response);
         }, error => this.dataService.handleError(error));
     }
 
@@ -77,6 +63,20 @@ export class FunctionComponent implements OnInit {
                 this.permissionModal.hide();
             }, error => this.dataService.handleError(error));
         }
+    }
+
+    public showAdd() {
+        this.entity = [];
+        this.addEditModal.show();
+        this.editFlag = false;
+    }
+
+    public showEdit(id: string) {
+        this.dataService.get(`/api/function/detail/${id}`).subscribe((response: any) => {
+            this.entity = response;
+            this.editFlag = true;
+            this.addEditModal.show();
+        }, error => this.dataService.handleError(error));
     }
 
     public saveChanges(valid: boolean) {
