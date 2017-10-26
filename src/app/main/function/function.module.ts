@@ -19,7 +19,7 @@ const functionRoutes: Routes = [
         CommonModule,
         FormsModule,
         TreeModule,
-        ModalModule,
+        ModalModule.forRoot(),
         RouterModule.forChild(functionRoutes)
     ],
     providers: [DataService, UtilityService, NotificationService],

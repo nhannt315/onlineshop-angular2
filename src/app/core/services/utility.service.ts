@@ -41,6 +41,22 @@ export class UtilityService {
         return roots;
     }
 
+    Unflatten2 = (arr: any[]): any[] => {
+        const map = {};
+        const roots: any[] = [];
+        for (let i = 0; i < arr.length; i += 1) {
+            const node = arr[i];
+            node.children = [];
+            map[node.ID] = i; // use map to look-up the parents
+            if (node.ParentID !== null) {
+                arr[map[node.ParentID]].children.push(node);
+            } else {
+                roots.push(node);
+            }
+        }
+        return roots;
+    }
+
 
     MakeSeoTitle(input: string) {
         if (input === undefined || input === '') {

@@ -18,7 +18,8 @@ const roleRoutes: Routes = [
         RouterModule.forChild(roleRoutes),
         PaginationModule.forRoot(),
         FormsModule,
-        ModalModule.forRoot()
+        ModalModule.forRoot(),
+
     ],
     providers: [DataService, NotificationService],
     declarations: [RoleComponent]
